@@ -1,0 +1,79 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+.clear-ul {
+    overflow: scroll;
+    position: fixed;
+    top: 50px;
+    left: 0px;
+    right: 0;
+    bottom: 0;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+a,
+a:hover {
+    text-decoration: none !important;
+    outline: none !important;
+    color: inherit;
+}
+
+.form-control {
+    box-shadow: none !important;
+}
+
+.form-control:hover,
+.form-control:focus {
+    border-color: #78b2f1;
+}
+
+.form-control-title {
+    font-weight: 600;
+    color: #0069da;
+}
+
+.actions {
+    text-align: right;
+}
+
+.actions label {
+    position: relative;
+    padding: 5px 15px;
+    margin-bottom: 0px;
+    color: #0b7df7 !important;
+    cursor: pointer;
+}
+
+.actions label:hover {
+    background-color: #0b7df7!important;
+    color: #fff !important;
+}
+
+.actions .ion {
+    padding-top: 6px;
+    position: absolute;
+}
+
+.actions span {
+    font-size: 19px;
+    line-height: 38px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0px;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) inset !important;
+    background-color: #fff;
+}
+
+pre.prettyprint span {
+    font-family: "Consolas", 'sans-serif';
+    font-size: 17px;
+    padding: 0px;
+    line-height: 17px;
+}

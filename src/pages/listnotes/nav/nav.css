@@ -1,0 +1,24 @@
+.nav .ion {
+    font-size: 24px;
+}
+
+.nav .form-control {
+    height: 48px;
+    border: 0px;
+}
+
+.nav .col-8,
+.nav .col-4,
+.nav .container-fluid {
+    padding: 0px !important;
+    margin: 0px !important;
+}
+
+.nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    background-color: #fff;
+    z-index: 20;
+}

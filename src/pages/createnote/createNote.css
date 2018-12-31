@@ -1,0 +1,16 @@
+.create-note h4 {
+    padding: 10px 20px;
+}
+
+.create-note .container-fluid {
+    padding: 0px 20px;
+    margin: 0px;
+}
+
+.create-note {
+    margin-bottom: 80px;
+}
+
+.ta-adjust-height {
+    min-height: 200px;
+}

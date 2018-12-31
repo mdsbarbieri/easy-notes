@@ -1,0 +1,9 @@
+span {
+    font-size: 29px;
+    padding: 15px;
+    line-height: 40px;
+}
+
+.close:not(:disabled):not(.disabled):hover {
+    color: #0b7df7;
+}
