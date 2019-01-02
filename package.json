@@ -2,7 +2,12 @@
     "name": "notes-v2-react",
     "version": "0.1.0",
     "private": true,
-    "dependencies": {
+    "devDependencies": {
+        "cross-env": "^5.2.0",
+        "electron": "^4.0.0",
+        "electron-builder": "^20.38.4",
+        "redux-devtools-extension": "^2.13.7",
+        "version-bump-prompt": "^4.2.2",
         "@babel/core": "7.1.6",
         "@ckeditor/ckeditor5-build-classic": "^11.2.0",
         "@ckeditor/ckeditor5-react": "^1.1.0",
@@ -16,9 +21,12 @@
         "bfj": "6.1.1",
         "case-sensitive-paths-webpack-plugin": "2.1.2",
         "chalk": "^2.4.1",
+        "concurrently": "^4.1.0",
         "css-loader": "1.0.0",
         "dotenv": "6.0.0",
         "dotenv-expand": "4.2.0",
+        "electron-devtools-installer": "^2.2.4",
+        "electron-publisher-s3": "^20.17.2",
         "eslint": "5.6.0",
         "eslint-config-react-app": "^3.0.6",
         "eslint-loader": "2.1.1",
@@ -57,15 +65,24 @@
         "style-loader": "0.23.0",
         "terser-webpack-plugin": "1.1.0",
         "url-loader": "1.1.1",
+        "wait-on": "^3.2.0",
         "webpack": "4.19.1",
         "webpack-dev-server": "3.1.9",
         "webpack-manifest-plugin": "2.0.4",
         "workbox-webpack-plugin": "3.6.3"
     },
+    "dependencies": {
+        "electron-is-dev": "^1.0.1"
+    },
+    "main": "./public/electron.js",
     "scripts": {
-        "start": "node scripts/start.js",
+        "dev": "node scripts/start.js",
         "build": "node scripts/build.js",
-        "test": "node scripts/test.js"
+        "test": "node scripts/test.js",
+        "start": "concurrently \"cross-env BROWSER=none node scripts/start\" \"wait-on http://localhost:3001 && electron .\"",
+        "pack": "electron-builder --dir",
+        "dist": "npx build --x64 --macos --win --linux --c.extraMetadata.main=src/electron.js -p always",
+        "dist-win": "npx build --win  --c.extraMetadata.main=./build/electron.js -p always"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -81,7 +98,49 @@
             "react-app"
         ]
     },
-    "devDependencies": {
-        "redux-devtools-extension": "^2.13.7"
+    "homepage": "./",
+    "author": "Matheus Barbieri",
+    "build": {
+        "appId": "com.br.matheus.easy-notes",
+        "compression": "store",
+        "productName": "EasyNotes",
+        "files": [
+            "build/**/*"
+        ],
+        "directories": {
+            "buildResources": "static"
+        },
+        "mac": {
+            "icon": "assets/icon.icns",
+            "target": [
+                "pkg",
+                "dmg",
+                "mas"
+            ],
+            "publish": {
+                "provider": "s3",
+                "bucket": "example-releases",
+                "path": "releases"
+            },
+            "category": "com.br.matheus.easy-notes"
+        },
+        "win": {
+            "target": "nsis",
+            "icon": "assets/icon.ico"
+        },
+        "linux": {
+            "icon": "assets/icon.png",
+            "target": [
+                "snap",
+                "AppImage"
+            ],
+            "description": "EasyNotes",
+            "category": "Notes",
+            "publish": {
+                "provider": "s3",
+                "bucket": "example-releases",
+                "path": "releases"
+            }
+        }
     }
 }
