@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import Nav from "./nav/nav";
 import Notes from "./list/notes";
 import Loading from '../../fragments/loading/loading';
+import ErrorMessage from '../../fragments/message/error';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { setSelectedNoteIdx } from '../../redux/noteAction';
+import { setShowLoading } from '../../redux/globalActions';
 import {copyToClipboard} from '../../services/clipboardService'
 import _ from 'lodash';
 
@@ -12,15 +14,18 @@ class ListNotes extends Component {
 
   constructor(props){
     super(props);
-    this.loading = React.createRef()
     this._handleKeyDown = this._handleKeyDown.bind(this);
   }
 
   componentDidMount(){
-    this.loading.current.hide();
+    this.props.setShowLoading(false);
   }
 
-  _handleKeyDown = (event) => {
+  _handleKeyDown(event){
+    if(this.props.typedAction){
+      return;
+    }
+
     let idx = 0;
     switch( event.keyCode ) {
       case 13:
@@ -36,7 +41,7 @@ class ListNotes extends Component {
           return
         }
 
-        copyToClipboard(noteContent)
+        copyToClipboard(noteContent);
         break;
       case 38:
         idx =  this.props.selectedNoteIdx;
@@ -68,7 +73,8 @@ class ListNotes extends Component {
   render() {
     return (
       <div>
-        <Loading ref={this.loading}/>
+        <Loading />
+        <ErrorMessage />
         <Nav/>
         <Notes/>
       </div>
@@ -80,12 +86,13 @@ const mapStateToProps= (store) => {
   return {
     selectedNote :  store.selectedNote,
     selectedNoteIdx :  store.selectedNoteIdx,
-    renderedNotesQty: store.renderedNotesQty
+    renderedNotesQty: store.renderedNotesQty,
+    typedAction :  store.typedAction
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({setSelectedNoteIdx}, dispatch);
+  return bindActionCreators({setSelectedNoteIdx, setShowLoading}, dispatch);
 }
 
 export default connect(

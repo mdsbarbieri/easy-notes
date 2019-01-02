@@ -22,3 +22,31 @@
     background-color: #fff;
     z-index: 20;
 }
+
+.suggestion-content,
+.suggestion-overlay {
+    position: relative;
+    width: 100%;
+    z-index: 2;
+    background-color: #fff;
+}
+
+.suggestion-overlay .row {
+    height: 35px;
+    line-height: 35px;
+}
+
+.action-key {
+    padding-left: 27px;
+    font-weight: 700;
+    color: rgb(199, 0, 0)
+}
+
+.suggestion-content .overlay {
+    position: fixed;
+    background-color: #00000026;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}

@@ -9,7 +9,9 @@ let initialState = {
     },
     renderedNotesQty: 0,
     selectedNoteIdx: 0,
-    storagedActions: []
+    storagedActions: [],
+    showLoading: true,
+    errorMessage: ''
 }
 
 const reducers = (state = initialState, action) => {
@@ -43,6 +45,21 @@ const reducers = (state = initialState, action) => {
             return {
                 ...state,
                 storagedActions: action.payload
+            }
+        case ACTIONS.SET_TYPED_ACTION:
+            return {
+                ...state,
+                typedAction: action.payload
+            }
+        case ACTIONS.SHOW_LOADING:
+            return {
+                ...state,
+                showLoading: action.payload
+            }
+        case ACTIONS.ERROR_MESSAGE:
+            return {
+                ...state,
+                errorMessage: action.payload
             }
         default:
             return state

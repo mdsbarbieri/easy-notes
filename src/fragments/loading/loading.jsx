@@ -1,21 +1,11 @@
 import React, { Component } from 'react';
 import './loading.css';
+import { connect } from 'react-redux';
 
 class Loading extends Component {
-  state = {
-    show: true
-  }
-
-  show(){
-    this.setState({show : true});
-  }
-
-  hide(){
-    this.setState({show : false});
-  }
-
+  
   loading(){
-    if(this.state.show){
+    if(this.props.showLoading){
       return (
         <div className="loader-background">
           <div className="loader"></div>
@@ -31,5 +21,13 @@ class Loading extends Component {
   }
 }
 
-export default Loading;
+const mapStateToProps= (store) => {
+  return {
+    showLoading :  store.showLoading
+  }
+}
+
+export default connect(
+  mapStateToProps
+)(Loading);
 

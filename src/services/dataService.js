@@ -29,7 +29,7 @@ const actions = [{
     id: '124',
     description: 'Open browser',
     key: 'obrowser',
-    action: 'start $1'
+    action: 'start -t $1 -c $2'
 }]
 
 const getAllNotes = () => {

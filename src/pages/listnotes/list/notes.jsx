@@ -74,11 +74,11 @@ class Notes extends Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <ul className="clear-ul">
           {this.renderNotesList()}
         </ul>
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -3,9 +3,12 @@ import CloseLink from '../../fragments/close/closeLink';
 import './createNote.css';
 import { Link } from "react-router-dom";
 import Loading from '../../fragments/loading/loading';
+import ErrorMessage from '../../fragments/message/error';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { setShowLoading } from '../../redux/globalActions';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 const ckEditorConf = {
   toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable' ]
@@ -24,7 +27,6 @@ class CreateNote extends Component {
     this.setRichData = this.setRichData.bind(this);
     this.onChange = this.onChange.bind(this);
     this.save = this.save.bind(this);
-    this.loading = React.createRef();
   }
 
   setRichData(event, editor){
@@ -32,7 +34,7 @@ class CreateNote extends Component {
   }
   
   componentDidMount(){
-    this.loading.current.hide();
+    this.props.setShowLoading(false);
   }
 
   onChange(event){
@@ -114,7 +116,8 @@ class CreateNote extends Component {
   render() {
     return (
       <div className="create-note">
-        <Loading ref={this.loading}/>
+        <Loading />
+        <ErrorMessage />
         <CloseLink href="/"/>
         <h4 className="shadow-sm">New Note</h4>
         <div className="container-fluid">
@@ -161,6 +164,11 @@ const mapStateToProps= (store) => {
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({setShowLoading}, dispatch);
+}
+
 export default connect(
   mapStateToProps,
+  mapDispatchToProps
 )(CreateNote);

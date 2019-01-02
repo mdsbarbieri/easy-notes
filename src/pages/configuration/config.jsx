@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import CloseLink from '../../fragments/close/closeLink';
+import ErrorMessage from '../../fragments/message/error';
 import Loading from '../../fragments/loading/loading';
 import { connect } from 'react-redux';
 import ManageActions from './manageAction'
+import { bindActionCreators } from 'redux';
+import { setShowLoading } from '../../redux/globalActions';
 import './config.css';
 
 class Config extends Component {
@@ -18,11 +21,10 @@ class Config extends Component {
     this.onChange = this.onChange.bind(this);
     this.doEdit = this.doEdit.bind(this);
     this.doRemove = this.doRemove.bind(this);
-    this.loading = React.createRef();
   }
 
   componentDidMount(){
-    this.loading.current.hide();
+    this.props.setShowLoading(false)
   }
 
   onChange(event){
@@ -128,7 +130,8 @@ class Config extends Component {
   render() {
     return (
       <div className="create-note">
-        <Loading ref={this.loading}/>
+        <Loading />
+        <ErrorMessage />
         <CloseLink href="/"/>
         {this.renderSaveAction()}
         {this.renderRegisteredActions()}
@@ -144,6 +147,11 @@ const mapStateToProps= (store) => {
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({setShowLoading}, dispatch);
+}
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Config);

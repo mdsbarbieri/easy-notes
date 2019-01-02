@@ -20,9 +20,15 @@ const setSelectedNoteIdx = (qty) => ({
     payload: qty
 })
 
+const setTypedAction = (qty) => ({
+    type: ACTIONS.SET_TYPED_ACTION,
+    payload: qty
+})
+
 export {
     setStoragedNotes,
     setSelectedNote,
     setRenderedNotesQty,
-    setSelectedNoteIdx
+    setSelectedNoteIdx,
+    setTypedAction
 }
