@@ -9,19 +9,19 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { setStoragedNotes } from './redux/noteAction';
 import { setStoragedActions } from './redux/configActions';
-import {getAllNotes, getAllActions} from './services/dataService';
+import {getNotes, getActions} from './services/dataService';
 import _ from 'lodash';
 
 class App extends Component {
 
   componentDidMount(){
     if(_.isEmpty(this.props.storagedNotes)){
-      getAllNotes().then(result => {
+      getNotes().then(result => {
         this.props.setStoragedNotes(result.notes);
       });
     }
     if(_.isEmpty(this.props.storagedActions)){
-      getAllActions().then(result => {
+      getActions().then(result => {
         this.props.setStoragedActions(result.actions);
       });
     }

@@ -64,6 +64,10 @@ class Notes extends Component {
   }
 
   renderNotesList(){
+    if(!this.props.storagedNotes){
+      return;
+    }
+
     this.renderizedItensIndex = 0;
     let renderedContent =  this.props.storagedNotes.map((note) => (
       this.renderContent(note)

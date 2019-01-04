@@ -97,6 +97,9 @@ class Config extends Component {
   }
   
   renderNotesList(){
+    if(!this.props.storagedActions){
+      return;
+    }
     return this.props.storagedActions.map((action) => (
       this.renderActionContent(action)
     ));

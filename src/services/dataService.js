@@ -1,55 +1,21 @@
-import _ from 'lodash';
+import { getAllNotes } from '../backend/database/connector/note';
+import { getAllActions } from '../backend/database/connector/action';
 
-const notes = [{
-        id: '123',
-        title: 'Test 1 Title',
-        type: 'rich',
-        content: '<p>Testando essa <strong>treta</strong></p><ol><li>tasd</li><li>tasdasdas</li></ol><ul><li>asdasd</li><li>asd</li></ul>'
-    },
-    {
-        id: '124',
-        type: 'plainText',
-        title: 'Test 2 Title',
-        content: 'NoteTitle'
-    },
-    {
-        id: '125',
-        type: 'code',
-        title: 'Test 3 Title',
-        content: '.code .note-text-content {\n\tpadding: 12px 12px 0px 16px;\n\tborder: 1px solid #e0e0e0;\n\tmargin-top: 4px;\n}'
-    }
-];
+const defaultWorkspace = 'default';
 
-const actions = [{
-    id: '123',
-    description: 'Open terminal',
-    key: 'openterm',
-    action: 'cmd.exe'
-}, {
-    id: '124',
-    description: 'Open browser',
-    key: 'obrowser',
-    action: 'start -t $1 -c $2'
-}]
-
-const getAllNotes = () => {
-    return Promise.resolve({
-        notes: notes
-    });
+const getNotes = () => {
+    return getAllNotes();
 }
 
-const getNoteById = (id) => {
-    return Promise.resolve(_.find(notes, { id: id }));
+const getActions = () => {
+    return getAllActions();
 }
 
-const getAllActions = () => {
-    return Promise.resolve({
-        actions: actions
-    });
+const addNote = (workspace, note) => {
+
 }
 
 export {
-    getAllNotes,
-    getNoteById,
-    getAllActions
+    getNotes,
+    getActions
 }

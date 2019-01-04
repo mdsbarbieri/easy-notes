@@ -102,7 +102,7 @@ class Header extends Component {
       <header className="nav shadow-sm">
         <div className="row container-fluid">
           <div className="col-8">
-            <input type="text" className="form-control" autocomplete="off" autoFocus onChange={this.handleSetFilter} name="inputFilter" placeholder="Search..."/>
+            <input type="text" className="form-control" autoComplete="off" autoFocus onChange={this.handleSetFilter} name="inputFilter" placeholder="Search..."/>
           </div>
           <div className="col-4 actions">
             <Link to="/new">
