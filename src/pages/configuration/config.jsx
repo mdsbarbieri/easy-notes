@@ -7,6 +7,7 @@ import ManageActions from './manageAction'
 import { bindActionCreators } from 'redux';
 import { setShowLoading } from '../../redux/globalActions';
 import './config.css';
+import LoadData from '../../loadData';
 
 class Config extends Component {
 
@@ -111,7 +112,7 @@ class Config extends Component {
       <div>
         <h4 className="shadow-sm">Registered Actions</h4>
         <div className="container-fluid">
-          <table class="table">
+          <table className="table">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -134,6 +135,7 @@ class Config extends Component {
     return (
       <div className="create-note">
         <Loading />
+        <LoadData />
         <ErrorMessage />
         <CloseLink href="/"/>
         {this.renderSaveAction()}

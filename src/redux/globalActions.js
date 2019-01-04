@@ -10,7 +10,13 @@ const setErrorMessage = (errorMessage) => ({
     payload: errorMessage
 })
 
+const setStorageNeedUpdate = (storageNeedUpdate) => ({
+    type: ACTIONS.STORAGE_NEED_UPDATE,
+    payload: storageNeedUpdate
+})
+
 export {
     setShowLoading,
-    setErrorMessage
+    setErrorMessage,
+    setStorageNeedUpdate
 }

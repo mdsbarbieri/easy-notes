@@ -1,13 +1,14 @@
-import Datastore from 'nedb';
+const Datastore = require('nedb');
 
 const action = new Datastore({ filename: './src/backend/database/action.json', autoload: true });
 
 const defaultErrorResponse = {
     errorMessage: 'Invalid Data',
-    code: 401
+    code: 401,
+    error: true
 }
 
-const getAllActions = () => {
+const findAllActions = () => {
     return new Promise((resolve, reject) => {
         action.find({}, (err, value) => {
             (err) ? reject(err): resolve(value);
@@ -15,7 +16,7 @@ const getAllActions = () => {
     });
 }
 
-const getActionById = (id) => {
+const findActionById = (id) => {
     return new Promise((resolve, reject) => {
         action.find({ _id: id }, (err, value) => {
             (err) ? reject(err): resolve(value);
@@ -23,12 +24,13 @@ const getActionById = (id) => {
     });
 }
 
-const addAction = (data) => {
+const insertAction = (data) => {
     return new Promise((resolve, reject) => {
         if (!data || !data.description || !data.key || !data.action) {
             reject(defaultErrorResponse);
             return;
         }
+        data.createdDate = new Date();
         action.insert(action, (err, value) => {
             (err) ? reject(err): resolve(value);
         })
@@ -55,9 +57,9 @@ const removeAction = (id) => {
 }
 
 export {
-    getAllActions,
-    getActionById,
-    addAction,
+    findAllActions,
+    findActionById,
+    insertAction,
     updateAction,
     removeAction
 }

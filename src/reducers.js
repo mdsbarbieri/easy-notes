@@ -11,7 +11,8 @@ let initialState = {
     selectedNoteIdx: 0,
     storagedActions: [],
     showLoading: true,
-    errorMessage: ''
+    errorMessage: '',
+    storageNeedUpdate: true
 }
 
 const reducers = (state = initialState, action) => {
@@ -60,6 +61,11 @@ const reducers = (state = initialState, action) => {
             return {
                 ...state,
                 errorMessage: action.payload
+            }
+        case ACTIONS.STORAGE_NEED_UPDATE:
+            return {
+                ...state,
+                storageNeedUpdate: action.payload
             }
         default:
             return state

@@ -1,14 +1,13 @@
 const Datastore = require('nedb');
 const notes = new Datastore({ filename: './src/backend/database/note.json', autoload: true });
-const workspaces = new Datastore({ filename: './src/backend/database/workspaces.json', autoload: true });
-const config = new Datastore({ filename: './src/backend/database/config.json', autoload: true });
 
 const defaultErrorResponse = {
     errorMessage: 'Invalid Data',
-    code: 401
+    code: 401,
+    error: true
 }
 
-const getAllNotes = () => {
+const findAllNotes = () => {
     return new Promise((resolve, reject) => {
         notes.find({}, (err, value) => {
             (err) ? reject(err): resolve(value);
@@ -16,7 +15,7 @@ const getAllNotes = () => {
     });
 }
 
-const getNoteById = (id) => {
+const findNoteById = (id) => {
     return new Promise((resolve, reject) => {
         notes.find({ _id: id }, (err, value) => {
             (err) ? reject(err): resolve(value);
@@ -24,17 +23,19 @@ const getNoteById = (id) => {
     });
 }
 
-const addNote = (data) => {
+const insertNote = (data) => {
     return new Promise((resolve, reject) => {
         if (!data || !data.workspace || !data.type || !data.title || !data.content) {
             reject(defaultErrorResponse);
             return;
         }
-        notes.insert(note, (err, value) => {
+        data.createdDate = new Date();
+        notes.insert(data, (err, value) => {
             (err) ? reject(err): resolve(value);
         })
     });
 }
+
 const updateNote = (id, data) => {
     return new Promise((resolve, reject) => {
         if (!data || !data.workspace || !data.type || !data.title || !data.content) {
@@ -47,8 +48,12 @@ const updateNote = (id, data) => {
     });
 }
 
-const removeNote = (id) => {
+const deleteNote = (id) => {
     return new Promise((resolve, reject) => {
+        if (!id) {
+            reject(defaultErrorResponse);
+            return;
+        }
         notes.remove({ _id: id }, (err, numRemoved) => {
             (err) ? reject(err): resolve({ numRemoved: numRemoved });
         })
@@ -56,9 +61,9 @@ const removeNote = (id) => {
 }
 
 module.exports = {
-    getAllNotes,
-    getNoteById,
-    addNote,
+    findAllNotes,
+    findNoteById,
+    insertNote,
     updateNote,
-    removeNote
+    deleteNote
 }

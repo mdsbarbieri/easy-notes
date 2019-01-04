@@ -1,20 +1,29 @@
 import React, { Component} from 'react';
 import { Link } from "react-router-dom";
+import {removeNote} from '../../../services/dataService';
+import { setShowLoading, setErrorMessage, setStorageNeedUpdate } from '../../../redux/globalActions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 class ManageNote extends Component {
 
   constructor(props){
     super(props);
     this.doRemove = this.doRemove.bind(this);
-    this.doEdit = this.doEdit.bind(this);
   }
 
-  doRemove(noteId){
-    console.log(`Remove item ${this.props.id}`);
-  }
-
-  doEdit(noteId){
-    console.log(`Edit item ${this.props.id}`);
+  doRemove(){
+    this.props.setShowLoading(true);
+    removeNote(this.props.id).then(result => {
+      this.props.setShowLoading(false)
+      this.props.setStorageNeedUpdate(true);
+    }).catch(err => {
+      this.props.setShowLoading(false)
+      this.props.setStorageNeedUpdate(true);
+      if(err && err.errorMessage){
+        this.props.setErrorMessage(err.errorMessage);
+      }
+    })
   }
 
   render() {
@@ -33,4 +42,11 @@ class ManageNote extends Component {
   }
 }
 
-export default ManageNote;
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({setShowLoading, setErrorMessage, setStorageNeedUpdate}, dispatch);
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(ManageNote);

@@ -1,6 +1,6 @@
 //https://getstream.io/blog/takeaways-on-building-a-react-based-app-with-electron/
 const { app, BrowserWindow, shell, ipcMain, globalShortcut } = require('electron');
-
+const ipcDataConnector = require('../src/backend/services/ipcDataConnector');
 const path = require('path');
 const isDev = require('electron-is-dev');
 
@@ -89,3 +89,5 @@ const installExtensions = () => {
         console.log('An error occurred: ', err);
     });
 }
+
+ipcDataConnector.declareMessageListener();

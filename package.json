@@ -49,6 +49,7 @@
         "postcss-loader": "3.0.0",
         "postcss-preset-env": "6.3.1",
         "postcss-safe-parser": "4.0.1",
+        "preload-webpack-plugin": "^2.3.0",
         "react": "^16.7.0",
         "react-app-polyfill": "^0.2.0",
         "react-code-prettify": "^0.0.1",
@@ -73,6 +74,7 @@
     },
     "dependencies": {
         "electron-is-dev": "^1.0.1",
+        "fs": "^0.0.1-security",
         "nedb": "^1.8.0"
     },
     "main": "./public/electron.js",

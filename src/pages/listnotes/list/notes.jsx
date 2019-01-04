@@ -39,33 +39,33 @@ class Notes extends Component {
   }
   renderRichContent(note, renderizedItensIndex, active){
     return (
-      <li className="clear-li rich" key={note.id} data-active={active} data-idx={renderizedItensIndex}>
-        <ManageNote id={note.id} />
-        <RichRender id={note.id} title={note.title} content={note.content} />
+      <li className="clear-li rich" key={note._id} data-active={active} data-idx={renderizedItensIndex}>
+        <ManageNote id={note._id} />
+        <RichRender id={note._id} title={note.title} content={note.content} />
       </li>
     )
   }
   renderPlainTextContent(note, renderizedItensIndex, active){
     return (
-      <li className="clear-li plain-text" key={note.id} data-active={active} data-idx={renderizedItensIndex}>
-        <ManageNote id={note.id} />
-        <PlainTextRender id={note.id} title={note.title} content={note.content} />
+      <li className="clear-li plain-text" key={note._id} data-active={active} data-idx={renderizedItensIndex}>
+        <ManageNote id={note._id} />
+        <PlainTextRender id={note._id} title={note.title} content={note.content} />
       </li>
     )
   }
   
   renderCodeContent(note, renderizedItensIndex, active){
     return (
-      <li className="clear-li code" key={note.id} data-active={active} data-idx={renderizedItensIndex}>
-        <ManageNote id={note.id} />
-        <CodeRender id={note.id} title={note.title} content={note.content} />
+      <li className="clear-li code" key={note._id} data-active={active} data-idx={renderizedItensIndex}>
+        <ManageNote id={note._id} />
+        <CodeRender id={note._id} title={note.title} content={note.content} />
       </li>
     )
   }
 
   renderNotesList(){
     if(!this.props.storagedNotes){
-      return;
+      return (<div></div>);
     }
 
     this.renderizedItensIndex = 0;

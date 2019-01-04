@@ -5,27 +5,8 @@ import ListNotes from './pages/listnotes/listNotes';
 import CreateNote from './pages/createnote/createNote';
 import EditNote from './pages/createnote/editNote';
 import Config from './pages/configuration/config';
-import { connect } from "react-redux";
-import { bindActionCreators } from 'redux';
-import { setStoragedNotes } from './redux/noteAction';
-import { setStoragedActions } from './redux/configActions';
-import {getNotes, getActions} from './services/dataService';
-import _ from 'lodash';
 
 class App extends Component {
-
-  componentDidMount(){
-    if(_.isEmpty(this.props.storagedNotes)){
-      getNotes().then(result => {
-        this.props.setStoragedNotes(result.notes);
-      });
-    }
-    if(_.isEmpty(this.props.storagedActions)){
-      getActions().then(result => {
-        this.props.setStoragedActions(result.actions);
-      });
-    }
-  }
 
   render() {
     return (
@@ -41,16 +22,5 @@ class App extends Component {
   }
 }
 
-const mapStateToProps= (store) => {
-  return {
-    storagedNotes :  store.storagedNotes,
-    storagedActions :  store.storagedActions
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({setStoragedNotes, setStoragedActions}, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
 

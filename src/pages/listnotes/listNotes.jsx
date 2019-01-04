@@ -9,6 +9,7 @@ import { setSelectedNoteIdx } from '../../redux/noteAction';
 import { setShowLoading } from '../../redux/globalActions';
 import {copyToClipboard} from '../../services/clipboardService'
 import _ from 'lodash';
+import LoadData from '../../loadData';
 
 class ListNotes extends Component {
 
@@ -32,7 +33,7 @@ class ListNotes extends Component {
         if(_.isEmpty(this.props.selectedNote)){
           return;
         }
-        const noteContainer =  document.getElementById(`note-${this.props.selectedNote.id}`);
+        const noteContainer =  document.getElementById(`note-${this.props.selectednote._id}`);
         if(!noteContainer){
           return;
         }
@@ -73,6 +74,7 @@ class ListNotes extends Component {
   render() {
     return (
       <div>
+        <LoadData />
         <Loading />
         <ErrorMessage />
         <Nav/>

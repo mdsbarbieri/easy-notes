@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import CloseLink from '../../fragments/close/closeLink';
 import './createNote.css';
-import { Link } from "react-router-dom";
+import { Link, withRouter  } from "react-router-dom";
 import Loading from '../../fragments/loading/loading';
 import ErrorMessage from '../../fragments/message/error';
 import CKEditor from '@ckeditor/ckeditor5-react';
+import { addNote } from '../../services/dataService';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { setShowLoading } from '../../redux/globalActions';
+import { setShowLoading, setErrorMessage, setStorageNeedUpdate } from '../../redux/globalActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import LoadData from '../../loadData';
 
 const ckEditorConf = {
   toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable' ]
@@ -44,6 +46,42 @@ class CreateNote extends Component {
     newState[name] = target.value;
 		this.setState(newState);
   }
+
+  save(){
+    this.props.setShowLoading(true)
+    let saveData = {};
+    if(this.props.initialNoteId){
+      saveData._id = this.props.initialNoteId;
+    }
+    
+    saveData.title = this.state.title;
+    saveData.type = this.state.type;
+    switch(this.state.type){
+      case 'code': 
+        saveData.content = this.state.codeData;
+        break;
+      case 'rich': 
+        saveData.content = this.richData;
+        break;
+      case 'plainText': 
+        saveData.content = this.state.plainTextData;
+        break;
+      default:
+        saveData.content = this.state.plainTextData;
+        break;
+    }
+
+    addNote(saveData).then(response => {
+      this.props.history.push('/');
+    }).catch(err => {
+      if(err && err.errorMessage){
+        this.props.setErrorMessage(err.errorMessage);
+      }
+      this.props.setShowLoading(false);
+      this.props.setStorageNeedUpdate(true);
+    })
+  }
+
   
   renderPlainTextData(){
     return(
@@ -72,30 +110,6 @@ class CreateNote extends Component {
     )
   }
 
-  save(){
-    let saveData = {};
-    if(this.props.initialNoteId){
-      saveData.id = this.props.initialNoteId;
-    }
-
-    saveData.title = this.state.title;
-    saveData.type = this.state.type;
-    switch(this.state.type){
-      case 'code': 
-        saveData.content = this.state.codeData;
-        break;
-      case 'rich': 
-        saveData.content = this.richData;
-        break;
-      case 'plainText': 
-        saveData.content = this.state.plainTextData;
-        break;
-      default:
-        saveData.content = this.state.plainTextData;
-        break;
-    }
-  }
-
   renderInputMode(){
     switch(this.state.type){
       case 'code': 
@@ -117,6 +131,7 @@ class CreateNote extends Component {
     return (
       <div className="create-note">
         <Loading />
+        <LoadData />
         <ErrorMessage />
         <CloseLink href="/"/>
         <h4 className="shadow-sm">New Note</h4>
@@ -165,10 +180,10 @@ const mapStateToProps= (store) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({setShowLoading}, dispatch);
+  return bindActionCreators({setShowLoading, setErrorMessage, setStorageNeedUpdate}, dispatch);
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateNote);
+)(CreateNote));

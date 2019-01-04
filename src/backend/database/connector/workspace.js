@@ -3,10 +3,11 @@ const workspace = new Datastore({ filename: './src/backend/database/workspace.js
 
 const defaultErrorResponse = {
     errorMessage: 'Invalid Data',
-    code: 401
+    code: 401,
+    error: true
 }
 
-const getAllWorkspace = () => {
+const findAllWorkspace = () => {
     return new Promise((resolve, reject) => {
         workspace.find({}, (err, value) => {
             (err) ? reject(err): resolve(value);
@@ -14,7 +15,7 @@ const getAllWorkspace = () => {
     });
 }
 
-const getWorkspaceById = (id) => {
+const findWorkspaceById = (id) => {
     return new Promise((resolve, reject) => {
         workspace.find({ _id: id }, (err, value) => {
             (err) ? reject(err): resolve(value);
@@ -22,12 +23,13 @@ const getWorkspaceById = (id) => {
     });
 }
 
-const addWorkspace = (data) => {
+const insertWorkspace = (data) => {
     return new Promise((resolve, reject) => {
         if (!data || !data.user || !data.owner) {
             reject(defaultErrorResponse);
             return;
         }
+        data.createdDate = new Date();
         workspace.insert(data, (err, value) => {
             (err) ? reject(err): resolve(value);
         })
@@ -55,9 +57,9 @@ const removeWorkspace = (id) => {
 }
 
 module.exports = {
-    getAllWorkspace,
-    getWorkspaceById,
-    addWorkspace,
+    findAllWorkspace,
+    findWorkspaceById,
+    insertWorkspace,
     updateWorkspace,
     removeWorkspace
 }
