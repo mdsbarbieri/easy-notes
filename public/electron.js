@@ -76,7 +76,6 @@ ipcMain.on('load-page', (event, arg) => {
 
 const declareShortCuts = () => {
     globalShortcut.register("CommandOrControl+Shift+Space", () => toggleWindow(mainWindow));
-    globalShortcut.register("Esc", () => toggleWindow(mainWindow));
     globalShortcut.register('f5', function() { mainWindow.reload(); });
     globalShortcut.register('CommandOrControl+R', function() { mainWindow.reload(); });
 }

@@ -11,7 +11,6 @@ import {copyToClipboard} from '../../services/clipboardService'
 import _ from 'lodash';
 import LoadData from '../../loadData';
 import { withRouter  } from "react-router-dom";
-import { cpus } from 'os';
 
 class ListNotes extends Component {
 
@@ -78,7 +77,7 @@ class ListNotes extends Component {
   scrollToNote(){
       const activeElement = document.querySelector('[data-active=true]');
       if(activeElement){
-        const offsetTop = activeElement.offsetTop - 50;
+        const offsetTop = activeElement.offsetTop - 120;
         const container = document.querySelector('.clear-ul');
         if(container){
           container.scrollTo(0, offsetTop);

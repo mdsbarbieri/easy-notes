@@ -46,7 +46,7 @@ class CreateNote extends Component {
   }
 
   _handleKeyDown(event){
-      if (event.keyCode == '13' && event.ctrlKey) {
+      if (event.keyCode === '13' && event.ctrlKey) {
           this.save();
       }
   }
