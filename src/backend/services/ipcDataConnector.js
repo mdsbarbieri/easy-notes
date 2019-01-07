@@ -72,8 +72,11 @@ const declareToogleListener = (mainWindow, execute) => {
     });
 }
 
-const declareResizeListener = (mainWindow) => {
+const declareResizeListener = (mainWindow, isDev) => {
     ipcMain.on(ipcMessages.RESIZE_WINDOW, (event, size) => {
+        if (isDev) {
+            return;
+        }
         const position = mainWindow.getPosition();
         const currentSize = mainWindow.getSize();
         if (_.isEqual(size.height, currentSize[1])) {

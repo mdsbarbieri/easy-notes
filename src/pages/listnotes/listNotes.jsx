@@ -10,6 +10,8 @@ import { setShowLoading } from '../../redux/globalActions';
 import {copyToClipboard} from '../../services/clipboardService'
 import _ from 'lodash';
 import LoadData from '../../loadData';
+import { withRouter  } from "react-router-dom";
+import { cpus } from 'os';
 
 class ListNotes extends Component {
 
@@ -62,9 +64,15 @@ class ListNotes extends Component {
           this.scrollToNote();
         }
         break;
+      case 78:
+        if(event.ctrlKey){
+          this.props.history.push('/new');
+        }
+        break;
       default: 
           break;
     }
+
   }
 
   scrollToNote(){
@@ -112,8 +120,8 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({setSelectedNoteIdx, setShowLoading}, dispatch);
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(ListNotes);
+)(ListNotes));
 

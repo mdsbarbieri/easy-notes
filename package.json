@@ -41,7 +41,6 @@
         "jest": "23.6.0",
         "jest-pnp-resolver": "1.0.1",
         "jest-resolve": "23.6.0",
-        "lodash": "^4.17.11",
         "mini-css-extract-plugin": "0.4.3",
         "optimize-css-assets-webpack-plugin": "5.0.1",
         "pnp-webpack-plugin": "1.1.0",
@@ -75,7 +74,8 @@
     "dependencies": {
         "electron-is-dev": "^1.0.1",
         "fs": "^0.0.1-security",
-        "nedb": "^1.8.0"
+        "nedb": "^1.8.0",
+        "lodash": "^4.17.11"
     },
     "main": "./public/electron.js",
     "scripts": {
@@ -107,8 +107,10 @@
         "appId": "com.br.matheus.easy-notes",
         "compression": "store",
         "productName": "EasyNotes",
+        "asar": true,
         "files": [
-            "build/**/*"
+            "build/**/*",
+            "src/backend/**/*"
         ],
         "directories": {
             "buildResources": "static"

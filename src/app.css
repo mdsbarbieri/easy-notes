@@ -78,3 +78,7 @@ pre.prettyprint span {
     padding: 0px;
     line-height: 17px;
 }
+
+p {
+    margin-bottom: 0px
+}

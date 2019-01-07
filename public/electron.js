@@ -14,34 +14,35 @@ createWindow = () => {
             nodeIntegration: true,
             preload: __dirname + '/preload.js',
         },
-        width: 650,
-        height: 40,
-        minWidth: 650,
-        maxWidth: 650,
-        minHeight: 40,
-        maxHeight: 350,
         center: true,
         frame: false,
         resizable: true,
         show: false
     }
 
-    // if (isDev) {
-    //     windowConfig.width = 800;
-    //     windowConfig.height = 600;
-    // }
+    if (!isDev) {
+        windowConfig.width = 650;
+        windowConfig.height = 40;
+        windowConfig.minWidth = 650;
+        windowConfig.maxWidth = 650;
+        windowConfig.minHeight = 40;
+        windowConfig.maxHeight = 350;
+    } else {
+        windowConfig.width = 650;
+        windowConfig.height = 800;
+    }
 
     mainWindow = new BrowserWindow(windowConfig);
     mainWindow.loadURL(isDev ? 'http://localhost:3001' : `file://${path.join(__dirname, '../build/index.html')}`);
     declareShortCuts();
 
-    // if (isDev) {
-    // mainWindow.webContents.openDevTools()
-    //     installExtensions();
-    // }
+    if (isDev) {
+        mainWindow.webContents.openDevTools()
+        installExtensions();
+    }
 
     ipcDataConnector.declareToogleListener(mainWindow, toggleWindow);
-    ipcDataConnector.declareResizeListener(mainWindow);
+    ipcDataConnector.declareResizeListener(mainWindow, isDev);
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
 
@@ -74,7 +75,7 @@ ipcMain.on('load-page', (event, arg) => {
 });
 
 const declareShortCuts = () => {
-    globalShortcut.register("CommandOrControl+Shift+Alt+Space", () => toggleWindow(mainWindow));
+    globalShortcut.register("CommandOrControl+Shift+Space", () => toggleWindow(mainWindow));
     globalShortcut.register("Esc", () => toggleWindow(mainWindow));
     globalShortcut.register('f5', function() { mainWindow.reload(); });
     globalShortcut.register('CommandOrControl+R', function() { mainWindow.reload(); });

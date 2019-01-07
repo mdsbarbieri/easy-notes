@@ -13,24 +13,21 @@
 }
 
 .clear-li.active,
-.clear-li[data-active="true"],
-.clear-li:hover {
+.clear-li[data-active="true"] {
     box-shadow: none;
     transition: all 0.1s;
     border: 2px solid #8a8a8a;
     border-radius: 3px;
 }
 
-.clear-ul:hover .clear-li:hover,
-.clear-ul:hover .clear-li:hover .note-text-content .hMyhSt .prettyprint {
-    background-color: #e6e6e6 !important;
-    border: 2px solid #fff;
-}
-
 .note-title {
     font-size: 19px;
     color: #5f5f5f;
     margin: 0px;
+}
+
+.note-text-content {
+    margin-top: 5px;
 }
 
 .note-text-content .hMyhSt {

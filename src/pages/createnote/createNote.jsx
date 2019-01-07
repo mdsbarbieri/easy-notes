@@ -13,6 +13,7 @@ import { bindActionCreators } from 'redux';
 import LoadData from '../../loadData';
 import ipcMessages from '../../backend/ipcMessagesEsm';
 const { ipcRenderer } = window.require('electron');
+const { clipboard } = window.require('electron');
 
 const ckEditorConf = {
   toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable' ]
@@ -22,7 +23,7 @@ class CreateNote extends Component {
   constructor(props){
     super(props);
     this.state = {
-      plainTextData: props.initialPlainTextData || '',
+      plainTextData: props.initialPlainTextData || clipboard.readText() || '',
       codeData: props.initialCodeData || '',
       title: props.initialTitleData || '',
       type: props.initialTypeData || 'plainText'
@@ -31,6 +32,7 @@ class CreateNote extends Component {
     this.setRichData = this.setRichData.bind(this);
     this.onChange = this.onChange.bind(this);
     this.save = this.save.bind(this);
+    this._handleKeyDown = this._handleKeyDown.bind(this);
   }
 
   setRichData(event, editor){
@@ -39,7 +41,14 @@ class CreateNote extends Component {
   
   componentDidMount(){
     this.props.setShowLoading(false);
+    document.addEventListener("keydown", this._handleKeyDown);
     ipcRenderer.send(ipcMessages.RESIZE_WINDOW, {width: 650, height: 350, full: true});
+  }
+
+  _handleKeyDown(event){
+      if (event.keyCode == '13' && event.ctrlKey) {
+          this.save();
+      }
   }
 
   onChange(event){
@@ -144,7 +153,7 @@ class CreateNote extends Component {
             <div className="col-8">
               <div className="form-group">
                 <label htmlFor="newNoteTitle" className="form-control-title">Title:</label>
-                <input type="text" className="form-control" name="title" onChange={this.onChange} id="newNoteTitle" placeholder="Title" value={this.state.title} />
+                <input type="text" className="form-control" autoFocus={true} name="title" onChange={this.onChange} id="newNoteTitle" placeholder="Title" value={this.state.title} />
               </div>
             </div>
             <div className="col-4">

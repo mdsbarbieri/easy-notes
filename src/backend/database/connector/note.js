@@ -1,5 +1,8 @@
 const Datastore = require('nedb');
-const notes = new Datastore({ filename: './src/backend/database/note.json', autoload: true });
+const os = require('os');
+
+let dataFolder = os.homedir() + '/easy-notes/data';
+const notes = new Datastore({ filename: `${dataFolder}/note.json`, autoload: true });
 
 const defaultErrorResponse = {
     errorMessage: 'Invalid Data',
