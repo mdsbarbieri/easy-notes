@@ -8,12 +8,15 @@ class ManageAction extends Component {
     this.doEdit = this.doEdit.bind(this);
   }
 
-  doRemove(noteId){
-    console.log(`Remove item ${this.props.id}`);
+  doRemove(){
+    if(!this.props.id){
+      return;
+    }
+    this.props.doRemove(this.props.id)
   }
 
-  doEdit(noteId){
-    console.log(`Edit item ${this.props.id}`);
+  doEdit(){
+    this.props.doEdit(this.props.id)
   }
 
   render() {

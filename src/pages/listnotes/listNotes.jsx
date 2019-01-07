@@ -33,7 +33,7 @@ class ListNotes extends Component {
         if(_.isEmpty(this.props.selectedNote)){
           return;
         }
-        const noteContainer =  document.getElementById(`note-${this.props.selectednote._id}`);
+        const noteContainer =  document.getElementById(`note-${this.props.selectedNote._id}`);
         if(!noteContainer){
           return;
         }
@@ -50,6 +50,7 @@ class ListNotes extends Component {
           return;
         }
         this.props.setSelectedNoteIdx(idx - 1);
+        this.scrollToNote();
         break;
       case 40:
         idx =  this.props.selectedNoteIdx + 1;
@@ -57,10 +58,24 @@ class ListNotes extends Component {
           return;
         }
         this.props.setSelectedNoteIdx(idx);
+        if(idx > 1){
+          this.scrollToNote();
+        }
         break;
       default: 
           break;
     }
+  }
+
+  scrollToNote(){
+      const activeElement = document.querySelector('[data-active=true]');
+      if(activeElement){
+        const offsetTop = activeElement.offsetTop - 50;
+        const container = document.querySelector('.clear-ul');
+        if(container){
+          container.scrollTo(0, offsetTop);
+        }
+      }
   }
 
   componentWillMount(){

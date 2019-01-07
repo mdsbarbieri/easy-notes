@@ -1,4 +1,3 @@
-//https://getstream.io/blog/takeaways-on-building-a-react-based-app-with-electron/
 const { app, BrowserWindow, shell, ipcMain, globalShortcut } = require('electron');
 const ipcDataConnector = require('../src/backend/services/ipcDataConnector');
 const path = require('path');
@@ -7,7 +6,7 @@ const isDev = require('electron-is-dev');
 let mainWindow;
 
 createWindow = () => {
-    mainWindow = new BrowserWindow({
+    const windowConfig = {
         backgroundColor: '#F7F7F7',
         show: false,
         titleBarStyle: 'hidden',
@@ -15,24 +14,34 @@ createWindow = () => {
             nodeIntegration: true,
             preload: __dirname + '/preload.js',
         },
-        // width: 650,
-        // height: 350,
-        width: 800,
-        height: 600,
+        width: 650,
+        height: 40,
+        minWidth: 650,
+        maxWidth: 650,
+        minHeight: 40,
+        maxHeight: 350,
+        center: true,
         frame: false,
-        resizable: false,
+        resizable: true,
         show: false
-    });
-
-    mainWindow.loadURL(isDev ? 'http://localhost:3001' : `file://${path.join(__dirname, '../build/index.html')}`);
-
-    declareShortCuts();
-
-    if (isDev) {
-        mainWindow.webContents.openDevTools()
-        installExtensions();
     }
 
+    // if (isDev) {
+    //     windowConfig.width = 800;
+    //     windowConfig.height = 600;
+    // }
+
+    mainWindow = new BrowserWindow(windowConfig);
+    mainWindow.loadURL(isDev ? 'http://localhost:3001' : `file://${path.join(__dirname, '../build/index.html')}`);
+    declareShortCuts();
+
+    // if (isDev) {
+    // mainWindow.webContents.openDevTools()
+    //     installExtensions();
+    // }
+
+    ipcDataConnector.declareToogleListener(mainWindow, toggleWindow);
+    ipcDataConnector.declareResizeListener(mainWindow);
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
 
@@ -40,6 +49,10 @@ createWindow = () => {
             shell.openExternal(arg);
         });
     });
+
+    mainWindow.on('blur', () => {
+        mainWindow.hide();
+    })
 };
 
 app.on('ready', () => {
@@ -62,6 +75,7 @@ ipcMain.on('load-page', (event, arg) => {
 
 const declareShortCuts = () => {
     globalShortcut.register("CommandOrControl+Shift+Alt+Space", () => toggleWindow(mainWindow));
+    globalShortcut.register("Esc", () => toggleWindow(mainWindow));
     globalShortcut.register('f5', function() { mainWindow.reload(); });
     globalShortcut.register('CommandOrControl+R', function() { mainWindow.reload(); });
 }
@@ -90,4 +104,4 @@ const installExtensions = () => {
     });
 }
 
-ipcDataConnector.declareMessageListener();
+ipcDataConnector.declareDataListener();

@@ -1,3 +1,6 @@
+import ipcMessages from '../backend/ipcMessagesEsm';
+const { ipcRenderer } = window.require('electron');
+
 const copyToClipboard = (el) => {
     var doc = window.document,
         sel, range;
@@ -18,6 +21,7 @@ const copyToClipboard = (el) => {
     } else if (sel.empty) {
         sel.empty();
     }
+    ipcRenderer.send(ipcMessages.TOOGLE_WINDOW);
 }
 
 export {

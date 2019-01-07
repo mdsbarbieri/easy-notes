@@ -1,3 +1,6 @@
+import ipcMessages from '../backend/ipcMessagesEsm';
+const { ipcRenderer } = window.require('electron');
+
 const executeAction = (action, params) => {
     if (!action) {
         return;
@@ -7,14 +10,12 @@ const executeAction = (action, params) => {
         let renderedAction = _mountParams(actionValue, params);
         actionValue = renderedAction;
     }
-    if (actionValue) {
-        console.log(actionValue);
+
+    if (!actionValue) {
+        return;
     }
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            reject('Error on execute operation')
-        }, 2000)
-    });
+
+    ipcRenderer.send(ipcMessages.EXECUTE_ACTION, actionValue);
 }
 
 const _mountParams = (actionValue, params) => {

@@ -5,15 +5,22 @@ import Loading from '../../fragments/loading/loading';
 import { connect } from 'react-redux';
 import ManageActions from './manageAction'
 import { bindActionCreators } from 'redux';
-import { setShowLoading } from '../../redux/globalActions';
+import { setShowLoading, setErrorMessage, setStorageNeedUpdate } from '../../redux/globalActions';
 import './config.css';
 import LoadData from '../../loadData';
+import { saveAction, removeAction } from '../../services/dataService';
+import _ from 'lodash';
+import ipcMessages from '../../backend/ipcMessagesEsm';
+const { ipcRenderer } = window.require('electron');
+
 
 class Config extends Component {
 
   state = {
-    name: '',
-    action: ''
+    key: '',
+    action: '',
+    description: '',
+    editActionId: ''
   }
 
   constructor(props){
@@ -25,7 +32,8 @@ class Config extends Component {
   }
 
   componentDidMount(){
-    this.props.setShowLoading(false)
+    this.props.setShowLoading(false);
+    ipcRenderer.send(ipcMessages.RESIZE_WINDOW, {width: 650, height: 350, full: true});
   }
 
   onChange(event){
@@ -36,12 +44,66 @@ class Config extends Component {
 		this.setState(newState);
   }
   
+  resetState(){
+    this.setState({key: '',action: '',description: '', editActionId: ''});
+  }
 
   save(){
-    if(!this.state.name || !this.state.action){
+    this.props.setShowLoading(true);
+    if(!this.state.key || !this.state.action){
       return;
     }
-    console.log(this.state)
+
+    let saveData = {};
+    if(this.state.editActionId){
+      saveData._id = this.state.editActionId;
+    }
+    saveData.key = this.state.key;
+    saveData.action = this.state.action;
+    saveData.description = this.state.description;
+
+    saveAction(saveData).then(response => {
+      this.props.setStorageNeedUpdate(true);
+      this.props.setShowLoading(false);
+      this.resetState();
+    }).catch(err => {
+      if(err && err.errorMessage){
+        this.props.setErrorMessage(err.errorMessage);
+      }
+      this.props.setShowLoading(false);
+      this.props.setStorageNeedUpdate(true);
+    });
+  }
+
+  doRemove(actionId){
+    if(!actionId){
+      return;
+    }
+
+    removeAction(actionId).then(response => {
+      this.props.setStorageNeedUpdate(true);
+      this.props.setShowLoading(false);
+    }).catch(err => {
+      if(err && err.errorMessage){
+        this.props.setErrorMessage(err.errorMessage);
+      }
+      this.props.setShowLoading(false);
+      this.props.setStorageNeedUpdate(true);
+    });
+  }
+
+  doEdit(actionId){
+    if(!actionId){
+      return;
+    }
+    const editAction = _.find(this.props.storagedActions, {_id: actionId});
+    this.setState({
+      key: editAction.key,
+      action: editAction.action,
+      description: editAction.description,
+      editActionId: editAction._id
+    });
+    window.scrollTo(0, 0);
   }
 
   renderSaveAction(){
@@ -50,16 +112,22 @@ class Config extends Component {
         <h4 className="shadow-sm">Actions</h4>
         <div className="container-fluid">
           <div className="row">
-            <div className="col-3">
+            <div className="col-2">
               <div className="form-group">
                 <label htmlFor="newNoteTitle" className="form-control-title">Name:</label>
-                <input type="text" className="form-control" name="name" onChange={this.onChange} id="newConfigName" placeholder="Name" />
+                <input type="text" className="form-control" name="key" onChange={this.onChange} value={this.state.key} id="newConfigName" placeholder="Key" />
               </div>
             </div>
-            <div className="col-9">
+            <div className="col-3">
+              <div className="form-group">
+                <label htmlFor="newNoteTitle" className="form-control-title">Description:</label>
+                <input type="text" className="form-control" name="description" onChange={this.onChange} value={this.state.description} id="newConfigDescription" placeholder="Description" />
+              </div>
+            </div>
+            <div className="col-7">
               <div className="form-group">
                 <label htmlFor="newNoteTitle" className="form-control-title">Action:</label>
-                <input type="text" className="form-control" name="action" onChange={this.onChange} id="newConfigAction" placeholder="Action" />
+                <input type="text" className="form-control" name="action" onChange={this.onChange} value={this.state.action}  id="newConfigAction" placeholder="Action" />
               </div>
             </div>
           </div>
@@ -74,24 +142,14 @@ class Config extends Component {
       </div>
     )
   }
-
-  doRemove(noteId){
-    console.log(`Edit item ${this.props.id}`);
-  }
-
-  doEdit(noteId){
-    console.log(`Edit item ${this.props.id}`);
-  }
-
   renderActionContent(action){
     return (
-      <tr key={action.id}>
-        <th scope="row">{action.id}</th>
-        <td>{action.description}</td>
+      <tr key={action._id}>
+        <td>{action.description || '-'}</td>
         <td> {action.key}</td>
         <td> {action.action}</td>
         <td>
-          <ManageActions id={action.id}/>
+          <ManageActions id={action._id} doRemove={this.doRemove} doEdit={this.doEdit}/>
         </td>
       </tr>
     )
@@ -115,7 +173,6 @@ class Config extends Component {
           <table className="table">
             <thead>
               <tr>
-                <th scope="col">#</th>
                 <th scope="col">Description</th>
                 <th scope="col">Key</th>
                 <th scope="col">Action</th>
@@ -153,7 +210,7 @@ const mapStateToProps= (store) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({setShowLoading}, dispatch);
+  return bindActionCreators({setShowLoading, setErrorMessage, setStorageNeedUpdate}, dispatch);
 }
 
 export default connect(

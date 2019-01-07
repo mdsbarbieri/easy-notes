@@ -23,7 +23,14 @@ const findNoteById = (id) => {
     });
 }
 
-const insertNote = (data) => {
+const saveNote = (data) => {
+    if (data._id) {
+        return _updateNote(data._id, data);
+    }
+    return _insertNote(data);
+}
+
+const _insertNote = (data) => {
     return new Promise((resolve, reject) => {
         if (!data || !data.workspace || !data.type || !data.title || !data.content) {
             reject(defaultErrorResponse);
@@ -36,7 +43,7 @@ const insertNote = (data) => {
     });
 }
 
-const updateNote = (id, data) => {
+const _updateNote = (id, data) => {
     return new Promise((resolve, reject) => {
         if (!data || !data.workspace || !data.type || !data.title || !data.content) {
             reject(defaultErrorResponse);
@@ -63,7 +70,6 @@ const deleteNote = (id) => {
 module.exports = {
     findAllNotes,
     findNoteById,
-    insertNote,
-    updateNote,
+    saveNote,
     deleteNote
 }

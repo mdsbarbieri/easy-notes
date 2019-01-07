@@ -5,12 +5,14 @@ import { Link, withRouter  } from "react-router-dom";
 import Loading from '../../fragments/loading/loading';
 import ErrorMessage from '../../fragments/message/error';
 import CKEditor from '@ckeditor/ckeditor5-react';
-import { addNote } from '../../services/dataService';
+import { saveNote } from '../../services/dataService';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { setShowLoading, setErrorMessage, setStorageNeedUpdate } from '../../redux/globalActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import LoadData from '../../loadData';
+import ipcMessages from '../../backend/ipcMessagesEsm';
+const { ipcRenderer } = window.require('electron');
 
 const ckEditorConf = {
   toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable' ]
@@ -37,6 +39,7 @@ class CreateNote extends Component {
   
   componentDidMount(){
     this.props.setShowLoading(false);
+    ipcRenderer.send(ipcMessages.RESIZE_WINDOW, {width: 650, height: 350, full: true});
   }
 
   onChange(event){
@@ -71,7 +74,8 @@ class CreateNote extends Component {
         break;
     }
 
-    addNote(saveData).then(response => {
+    saveNote(saveData).then(response => {
+      this.props.setStorageNeedUpdate(true);
       this.props.history.push('/');
     }).catch(err => {
       if(err && err.errorMessage){

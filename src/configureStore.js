@@ -6,7 +6,7 @@ import rootReducer from './reducers'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 export default function configureStore(preloadedState) {
-    const middlewares = [loggerMiddleware, thunkMiddleware]
+    const middlewares = [thunkMiddleware]
     const middlewareEnhancer = applyMiddleware(...middlewares)
 
     const enhancers = [middlewareEnhancer, monitorReducersEnhancer]

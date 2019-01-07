@@ -1,6 +1,4 @@
-import { findAllActions } from '../backend/database/connector/action';
 import ipcMessages from '../backend/ipcMessagesEsm';
-
 const { ipcRenderer } = window.require('electron');
 const defaultWorkspace = 'default';
 
@@ -18,15 +16,38 @@ const getAllNotes = () => {
 }
 
 const getAllActions = () => {
-    return findAllActions();
+    return new Promise((resolve, reject) => {
+        ipcRenderer.send(ipcMessages.GET_ALL_ACTIONS);
+        ipcRenderer.on(ipcMessages.GET_ALL_ACTIONS_REPLY, (event, result) => {
+            if (result && result.error) {
+                reject(result);
+                return;
+            }
+            resolve(result);
+        })
+    })
 }
 
-const addNote = (note, workspace) => {
+const saveNote = (note, workspace) => {
     workspace = workspace || defaultWorkspace;
     note.workspace = workspace;
     return new Promise((resolve, reject) => {
-        ipcRenderer.send(ipcMessages.ADD_NOTE, note);
-        ipcRenderer.on(ipcMessages.ADD_NOTE_REPLY, (event, result) => {
+        ipcRenderer.send(ipcMessages.SAVE_NOTE, note);
+        ipcRenderer.on(ipcMessages.SAVE_NOTE_REPLY, (event, result) => {
+            if (result && result.error) {
+                reject(result);
+                return;
+            }
+            resolve(result);
+            return;
+        })
+    })
+}
+
+const saveAction = (action) => {
+    return new Promise((resolve, reject) => {
+        ipcRenderer.send(ipcMessages.SAVE_ACTION, action);
+        ipcRenderer.on(ipcMessages.SAVE_ACTION_REPLY, (event, result) => {
             if (result && result.error) {
                 reject(result);
                 return;
@@ -51,9 +72,25 @@ const removeNote = (id) => {
     })
 }
 
+const removeAction = (id) => {
+    return new Promise((resolve, reject) => {
+        ipcRenderer.send(ipcMessages.REMOVE_ACTION, id);
+        ipcRenderer.on(ipcMessages.REMOVE_ACTION_REPLY, (event, result) => {
+            if (result && result.error) {
+                reject(result);
+                return;
+            }
+            resolve(result);
+            return;
+        })
+    })
+}
+
 export {
     getAllNotes,
     getAllActions,
-    addNote,
-    removeNote
+    saveNote,
+    removeNote,
+    saveAction,
+    removeAction
 }

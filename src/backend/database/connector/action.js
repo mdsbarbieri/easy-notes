@@ -24,21 +24,28 @@ const findActionById = (id) => {
     });
 }
 
-const insertAction = (data) => {
+const saveAction = (data) => {
+    if (data._id) {
+        return _updateAction(data._id, data);
+    }
+    return _insertAction(data);
+}
+
+const _insertAction = (data) => {
     return new Promise((resolve, reject) => {
-        if (!data || !data.description || !data.key || !data.action) {
+        if (!data || !data.key || !data.action) {
             reject(defaultErrorResponse);
             return;
         }
         data.createdDate = new Date();
-        action.insert(action, (err, value) => {
+        action.insert(data, (err, value) => {
             (err) ? reject(err): resolve(value);
         })
     });
 }
-const updateAction = (id, data) => {
+const _updateAction = (id, data) => {
     return new Promise((resolve, reject) => {
-        if (!data || !data.description || !data.key || !data.action) {
+        if (!data || !data.key || !data.action) {
             reject(defaultErrorResponse);
             return;
         }
@@ -48,7 +55,7 @@ const updateAction = (id, data) => {
     });
 }
 
-const removeAction = (id) => {
+const deleteAction = (id) => {
     return new Promise((resolve, reject) => {
         action.remove({ _id: id }, (err, numRemoved) => {
             (err) ? reject(err): resolve({ numRemoved: numRemoved });
@@ -56,10 +63,9 @@ const removeAction = (id) => {
     });
 }
 
-export {
+module.exports = {
     findAllActions,
     findActionById,
-    insertAction,
-    updateAction,
-    removeAction
+    saveAction,
+    deleteAction
 }
