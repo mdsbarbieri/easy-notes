@@ -1,9 +1,11 @@
 # easy-notes
 A simple note manager with easy access.
 
-> ```AuthorNote:```
->Until this moment, I can't prepare versions to MacOs or Unix systems based, but this repository have MIT license and was builted on [ElectronJS](https://electronjs.org/)/[NodeJS](https://nodejs.org/), then, you can download the source code, customize and build your own app version.
+## Download
+You can download [here](https://github.com/mdsbarbieri/easy-notes/releases/tag/v1.0.1)!
 
+> ```AuthorNote:```
+>Until this moment, I didn't prepare versions to MacOs or Unix systems based, but this repository have MIT license and was builted on [ElectronJS](https://electronjs.org/)/[NodeJS](https://nodejs.org/), then, you can download the source code, customize and build your own app version.
 
 ## The APP
 
