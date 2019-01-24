@@ -25,7 +25,7 @@ The app accept three types of input, Plain Text, Rich text and Code *(this optio
 ![Step 1 - View reduced size](img/step_3_code.PNG)
 
 ### Actions
-In the Configuration tab, you can add actions to be executed in the System, the registered actions when triggers are executed on [Node ChildProcess]https://nodejs.org/api/child_process.html) and can whatever cmd comand that you want.
+In the Configuration tab, you can add actions to be executed in the System, the registered actions when triggers are executed on [Node ChildProcess](https://nodejs.org/api/child_process.html) and can whatever cmd comand that you want.
 
 ![Step 1 - View reduced size](img/step_4.PNG)
 
