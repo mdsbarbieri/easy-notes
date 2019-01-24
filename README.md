@@ -20,7 +20,7 @@ The app accepeted three types of input, Plain Text, Rich text and Code *(this op
 
 ![Step 1 - View reduced size](img/step_3_text.PNG)
 ![Step 1 - View reduced size](img/step_3_rich.PNG)
-![Step 1 - View reduced size](img/step_3_.PNG)
+![Step 1 - View reduced size](img/step_3_code.PNG)
 
 ### Actions
 In the Configuration tab, you can add actions to be executed in the System, the registereds action when triggered are executed on [Node ChildProcess]https://nodejs.org/api/child_process.html) and can whatever command language that you want.
